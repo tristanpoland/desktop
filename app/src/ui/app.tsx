@@ -2863,6 +2863,7 @@ export class App extends React.Component<IAppProps, IAppState> {
         activeTabIndex={activeTabIndex}
         onTabSelected={this.onTabSelected}
         onTabClosed={this.onTabClosed}
+        onNewTabClick={this.onNewTabClick}
       />
     )
   }
@@ -3521,7 +3522,13 @@ export class App extends React.Component<IAppProps, IAppState> {
   }
 
   private onSelectionChanged = (repository: Repository | CloningRepository) => {
-    this.props.dispatcher.selectRepository(repository)
+    // If there are existing tabs and the repository foldout is open,
+    // we're opening a new tab instead of switching
+    if (this.state.openTabs.length > 0 && this.state.currentFoldout?.type === FoldoutType.Repository) {
+      this.props.dispatcher.openRepositoryInNewTab(repository)
+    } else {
+      this.props.dispatcher.selectRepository(repository)
+    }
     this.props.dispatcher.closeFoldout(FoldoutType.Repository)
   }
 
@@ -3531,6 +3538,11 @@ export class App extends React.Component<IAppProps, IAppState> {
 
   private onTabClosed = (index: number) => {
     this.props.dispatcher.closeTab(index)
+  }
+
+  private onNewTabClick = () => {
+    // Open the repository foldout to select a repository for the new tab
+    this.props.dispatcher.showFoldout({ type: FoldoutType.Repository })
   }
 
   private onViewCommitOnGitHub = async (SHA: string, filePath?: string) => {

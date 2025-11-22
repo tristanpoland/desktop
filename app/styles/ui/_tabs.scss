@@ -136,32 +136,38 @@
   }
 }
 
-// Fade effect for overflow
-.tab-bar::before,
-.tab-bar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 20px;
-  pointer-events: none;
-  z-index: 1;
-}
+.new-tab-button {
+  flex-shrink: 0;
+  width: 35px;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary-color);
+  border-left: 1px solid var(--box-border-color);
+  transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
+  -webkit-app-region: no-drag;
 
-.tab-bar::before {
-  left: 0;
-  background: linear-gradient(
-    to right,
-    var(--toolbar-background-color),
-    transparent
-  );
-}
+  &:hover {
+    background-color: var(--toolbar-button-hover-background-color);
+    color: var(--text-color);
+  }
 
-.tab-bar::after {
-  right: 0;
-  background: linear-gradient(
-    to left,
-    var(--toolbar-background-color),
-    transparent
-  );
+  &:active {
+    background-color: var(--toolbar-button-active-background-color);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  .octicon {
+    width: 14px;
+    height: 14px;
+  }
 }
