@@ -1,8 +1,31 @@
-# [GitHub Desktop](https://desktop.github.com)
+# [GitHub Desktop](https://desktop.github.com) - Enhanced Fork
 
-[GitHub Desktop](https://desktop.github.com/) is an open-source [Electron](https://www.electronjs.org/)-based
+This is an enhanced fork of [GitHub Desktop](https://desktop.github.com/), an open-source [Electron](https://www.electronjs.org/)-based
 GitHub app. It is written in [TypeScript](https://www.typescriptlang.org) and
 uses [React](https://reactjs.org/).
+
+## ✨ New Features in This Fork
+
+### 🎨 AMOLED Dark Theme
+Modern true-black theme matching GitHub.com's dark mode, optimized for AMOLED displays with:
+- Pure black backgrounds (#010409) for battery saving
+- Modern GitHub syntax highlighting colors
+- High contrast for better readability
+- Complete customization system via SCSS variables
+
+[📖 Theme Documentation](docs/AMOLED_THEME.md)
+
+### 📑 Multi-Repository Tabs
+Work with multiple repositories simultaneously in browser-style tabs:
+- Open multiple repos in a single window
+- Quick switching between projects
+- Visual tab bar with repository icons
+- Smart tab management and auto-creation
+
+[📖 Tabs Documentation](docs/TABS_FEATURE.md)
+
+### 📚 Quick Start
+See [Feature Summary](docs/FEATURE_SUMMARY.md) for a complete overview and getting started guide.
 
 <picture>
   <source
