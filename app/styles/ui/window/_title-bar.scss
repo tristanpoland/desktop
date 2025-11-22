@@ -11,14 +11,14 @@
 
   @include darwin {
     height: var(--darwin-title-bar-height);
-    background: linear-gradient(to bottom, #3b3f46 0%, #2b2e33 100%);
-    border-bottom: 1px solid #000;
+    background: linear-gradient(to bottom, #0d1117 0%, #010409 100%);
+    border-bottom: 1px solid #21262d;
   }
 
   @include win32 {
     height: var(--win32-title-bar-height);
     background: var(--win32-title-bar-background-color);
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #21262d;
 
     .app-icon {
       color: var(--toolbar-button-secondary-color);
