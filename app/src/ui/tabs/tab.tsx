@@ -40,14 +40,14 @@ export class Tab extends React.Component<ITabProps> {
     return this.props.repository.name
   }
 
-  private getRepositoryIcon(): OcticonSymbol.OcticonSymbolType {
+  private getRepositoryIcon(): OcticonSymbol.OcticonSymbol {
     const { repository } = this.props
 
     if (repository instanceof Repository) {
       return iconForRepository(repository)
     } else {
       // Cloning repository
-      return OcticonSymbol.OcticonSymbol.desktopDownload
+      return OcticonSymbol.desktopDownload
     }
   }
 
@@ -65,7 +65,7 @@ export class Tab extends React.Component<ITabProps> {
             onClick={this.onCloseClick}
             aria-label="Close tab"
           >
-            <Octicon symbol={OcticonSymbol.OcticonSymbol.x} />
+            <Octicon symbol={OcticonSymbol.x} />
           </button>
         )}
       </div>
