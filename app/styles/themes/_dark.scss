@@ -12,12 +12,35 @@
 // https://www.electronjs.org/docs/api/native-theme#nativethemethemesource
 
 // AMOLED Theme colors - matching modern GitHub website
-$amoled-bg-primary: #010409;      // Primary background (GitHub's AMOLED background)
-$amoled-bg-secondary: #0d1117;    // Secondary background
-$amoled-bg-tertiary: #161b22;     // Tertiary background (cards, boxes)
-$amoled-bg-overlay: #1c2128;      // Overlay background
-$amoled-border: #30363d;          // Border color
-$amoled-border-muted: #21262d;    // Muted border color
+$amoled-bg-primary: #010409;          // Primary background (GitHub's AMOLED background)
+$amoled-bg-primary-rgb: 1, 4, 9;      // RGB values for transparency
+$amoled-bg-secondary: #0d1117;        // Secondary background
+$amoled-bg-secondary-rgb: 13, 17, 23; // RGB values for transparency
+$amoled-bg-tertiary: #161b22;         // Tertiary background (cards, boxes)
+$amoled-bg-overlay: #1c2128;          // Overlay background
+$amoled-border: #30363d;              // Border color
+$amoled-border-muted: #21262d;        // Muted border color
+
+// Diff colors - RGB values for transparency overlays
+$diff-add-rgb: 46, 160, 67;       // Green for additions
+$diff-delete-rgb: 248, 81, 73;    // Red for deletions
+$diff-hover-rgb: 88, 166, 255;    // Blue for hover states
+$warning-rgb: 187, 128, 9;        // Yellow/orange for warnings
+
+// Syntax highlighting colors - Modern GitHub AMOLED style
+$syntax-variable: #ffa657;        // Orange
+$syntax-alt-variable: #79c0ff;    // Light blue
+$syntax-keyword: #ff7b72;         // Coral red
+$syntax-atom: #79c0ff;            // Light blue
+$syntax-string: #a5d6ff;          // Sky blue
+$syntax-qualifier: #ffa657;       // Orange
+$syntax-type: #ff7b72;            // Coral red
+$syntax-comment: #8b949e;         // Gray
+$syntax-tag: #7ee787;             // Green
+$syntax-attribute: #79c0ff;       // Light blue
+$syntax-link: #a5d6ff;            // Sky blue
+$syntax-header: #ff7b72;          // Coral red
+$syntax-quote: #7ee787;           // Green
 
 // This blue passes WCAG 2 guidelines with lighter foreground colors
 $link-color: #58a6ff;
@@ -33,6 +56,9 @@ body.theme-dark {
   --text-secondary-color: #{$gray-400};
   --text-secondary-color-muted: #{darken($gray-500, 10%)};
   --background-color: #{$amoled-bg-primary};
+
+  // Title bar colors for Windows
+  --win32-title-bar-background-color: #{$amoled-bg-secondary};
 
   --button-background: #{$blue};
   --button-hover-background: #{lighten($blue, 5%)};
@@ -100,7 +126,7 @@ body.theme-dark {
    * Background color for skeleton or "loading" boxes
    */
   --box-skeleton-background-color: #{$gray-700};
-  --skeleton-background-gradient: -webkit-linear-gradient(left, rgba(1, 4, 9, 0) 0%, rgba(13, 17, 23, 0.5) 50%, rgba(1, 4, 9, 0) 100%);
+  --skeleton-background-gradient: -webkit-linear-gradient(left, rgba($amoled-bg-primary-rgb, 0) 0%, rgba($amoled-bg-secondary-rgb, 0.5) 50%, rgba($amoled-bg-primary-rgb, 0) 100%);
 
   /**
    * Border color for boxes.
@@ -163,17 +189,17 @@ body.theme-dark {
    * for use when content can be expanded through other means than
    * scrolling.
    */
-  --box-overflow-shadow-background: #{linear-gradient(180deg, rgba(1, 4, 9, 0) 0%, rgba(1, 4, 9, 1) 90%, rgba(1, 4, 9, 1) 100%)};
+  --box-overflow-shadow-background: #{linear-gradient(180deg, rgba($amoled-bg-primary-rgb, 0) 0%, rgba($amoled-bg-primary-rgb, 1) 90%, rgba($amoled-bg-primary-rgb, 1) 100%)};
 
   /**
    * Gradient used to indicate that content is overflowing, intended
    * for use when content can be expanded through other means than
    * scrolling. Used in conjuction with background-size, background-attachment, background-repeat.
    */
-  --no-shadow-top: #{linear-gradient($amoled-bg-primary, rgba(1, 4, 9, 0))};
-  --no-shadow-bottom: #{linear-gradient(rgba(1, 4, 9, 0), $amoled-bg-primary)};
-  --top-shadow: #{linear-gradient(0deg, rgba(1, 4, 9, 0) 0%, rgba(0, 0, 0, 0.6) 90%, rgba(0, 0, 0, 1) 100%)};
-  --bottom-shadow: #{linear-gradient(180deg, rgba(1, 4, 9, 0) 0%, rgba(0, 0, 0, 0.6) 90%, rgba(0, 0, 0, 1) 100%) 0 100%};
+  --no-shadow-top: #{linear-gradient($amoled-bg-primary, rgba($amoled-bg-primary-rgb, 0))};
+  --no-shadow-bottom: #{linear-gradient(rgba($amoled-bg-primary-rgb, 0), $amoled-bg-primary)};
+  --top-shadow: #{linear-gradient(0deg, rgba($amoled-bg-primary-rgb, 0) 0%, rgba(0, 0, 0, 0.6) 90%, rgba(0, 0, 0, 1) 100%)};
+  --bottom-shadow: #{linear-gradient(180deg, rgba($amoled-bg-primary-rgb, 0) 0%, rgba(0, 0, 0, 0.6) 90%, rgba(0, 0, 0, 1) 100%) 0 100%};
   --box-overflow-shadow-background-two: #{var(--no-shadow-top), var(--no-shadow-bottom) 0 100%, var(--top-shadow), var(--bottom-shadow)};
 
   /**
@@ -314,18 +340,18 @@ body.theme-dark {
   --diff-selected-gutter-color: #{$blue-600};
   --diff-selected-text-color: var(--text-color);
 
-  --diff-add-background-color: rgba(46, 160, 67, 0.15);
+  --diff-add-background-color: rgba(#{$diff-add-rgb}, 0.15);
   --diff-add-border-color: #{$amoled-border-muted};
   --diff-add-gutter-color: #{$amoled-border-muted};
-  --diff-add-gutter-background-color: rgba(46, 160, 67, 0.15);
-  --diff-add-inner-background-color: rgba(46, 160, 67, 0.4);
+  --diff-add-gutter-background-color: rgba(#{$diff-add-rgb}, 0.15);
+  --diff-add-inner-background-color: rgba(#{$diff-add-rgb}, 0.4);
   --diff-add-text-color: var(--diff-text-color);
 
-  --diff-delete-background-color: rgba(248, 81, 73, 0.15);
+  --diff-delete-background-color: rgba(#{$diff-delete-rgb}, 0.15);
   --diff-delete-border-color: #{$amoled-border-muted};
   --diff-delete-gutter-color: #{$amoled-border-muted};
-  --diff-delete-gutter-background-color: rgba(248, 81, 73, 0.15);
-  --diff-delete-inner-background-color: rgba(248, 81, 73, 0.4);
+  --diff-delete-gutter-background-color: rgba(#{$diff-delete-rgb}, 0.15);
+  --diff-delete-inner-background-color: rgba(#{$diff-delete-rgb}, 0.4);
   --diff-delete-text-color: var(--diff-text-color);
 
   --diff-hunk-background-color: #{$amoled-bg-secondary};
@@ -334,17 +360,17 @@ body.theme-dark {
   --diff-hunk-gutter-background-color: #{$amoled-bg-primary};
   --diff-hunk-text-color: var(--text-secondary-color);
 
-  --diff-hover-background-color: rgba(88, 166, 255, 0.3);
+  --diff-hover-background-color: rgba(#{$diff-hover-rgb}, 0.3);
   --diff-hover-border-color: #{$amoled-border};
   --diff-hover-gutter-color: #{$amoled-border};
   --diff-hover-text-color: var(--diff-text-color);
 
-  --diff-add-hover-background-color: rgba(46, 160, 67, 0.25);
+  --diff-add-hover-background-color: rgba(#{$diff-add-rgb}, 0.25);
   --diff-add-hover-border-color: #{$amoled-border};
   --diff-add-hover-gutter-color: #{$amoled-border};
   --diff-add-hover-text-color: var(--text-color);
 
-  --diff-delete-hover-background-color: rgba(248, 81, 73, 0.25);
+  --diff-delete-hover-background-color: rgba(#{$diff-delete-rgb}, 0.25);
   --diff-delete-hover-border-color: #{$amoled-border};
   --diff-delete-hover-gutter-color: #{$amoled-border};
   --diff-delete-hover-text-color: var(--text-color);
@@ -354,28 +380,28 @@ body.theme-dark {
   --diff-empty-hunk-handle: #{$amoled-border};
 
   // Syntax highlighting text colors - Modern GitHub AMOLED style
-  --syntax-variable-color: #ffa657;
-  --syntax-alt-variable-color: #79c0ff;
-  --syntax-keyword-color: #ff7b72;
-  --syntax-atom-color: #79c0ff;
-  --syntax-string-color: #a5d6ff;
-  --syntax-qualifier-color: #ffa657;
-  --syntax-type-color: #ff7b72;
-  --syntax-comment-color: #8b949e;
-  --syntax-tag-color: #7ee787;
-  --syntax-attribute-color: #79c0ff;
-  --syntax-link-color: #a5d6ff;
-  --syntax-header-color: #ff7b72;
-  --syntax-quote-color: #7ee787;
+  --syntax-variable-color: #{$syntax-variable};
+  --syntax-alt-variable-color: #{$syntax-alt-variable};
+  --syntax-keyword-color: #{$syntax-keyword};
+  --syntax-atom-color: #{$syntax-atom};
+  --syntax-string-color: #{$syntax-string};
+  --syntax-qualifier-color: #{$syntax-qualifier};
+  --syntax-type-color: #{$syntax-type};
+  --syntax-comment-color: #{$syntax-comment};
+  --syntax-tag-color: #{$syntax-tag};
+  --syntax-attribute-color: #{$syntax-attribute};
+  --syntax-link-color: #{$syntax-link};
+  --syntax-header-color: #{$syntax-header};
+  --syntax-quote-color: #{$syntax-quote};
 
   // Colors for form errors
   --error-color: #{$red};
-  --form-error-background: rgba(248, 81, 73, 0.15);
-  --form-error-border-color: rgba(248, 81, 73, 0.4);
+  --form-error-background: rgba(#{$diff-delete-rgb}, 0.15);
+  --form-error-border-color: rgba(#{$diff-delete-rgb}, 0.4);
   --form-error-text-color: var(--text-color);
 
-  --dialog-banner-success-background: rgba(46, 160, 67, 0.15);
-  --dialog-banner-success-border-color: rgba(46, 160, 67, 0.4);
+  --dialog-banner-success-background: rgba(#{$diff-add-rgb}, 0.15);
+  --dialog-banner-success-border-color: rgba(#{$diff-add-rgb}, 0.4);
   --dialog-banner-success-text-color: var(--text-color);
 
   // Inline form errors, displayed after the input field
@@ -391,15 +417,15 @@ body.theme-dark {
   --dialog-error-color: #{$red-600};
 
   /** Banner */
-  --banner-warning-background: rgba(187, 128, 9, 0.15);
+  --banner-warning-background: rgba(#{$warning-rgb}, 0.15);
   --banner-warning-text-color: var(--text-color);
-  --banner-warning-link-color: #58a6ff;
+  --banner-warning-link-color: #{$link-color};
   --banner-warning-icon-color: #{$yellow-600};
 
   /** File warning */
-  --file-warning-background-color: rgba(187, 128, 9, 0.15);
+  --file-warning-background-color: rgba(#{$warning-rgb}, 0.15);
   --file-warning-color: #{$yellow-600};
-  --file-warning-border-color: rgba(187, 128, 9, 0.4);
+  --file-warning-border-color: rgba(#{$warning-rgb}, 0.4);
 
   /** Tooltips */
   --tooltip-background-color: #{$amoled-bg-overlay};
