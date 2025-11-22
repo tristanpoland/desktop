@@ -71,6 +71,15 @@ export type PossibleSelections =
     }
   | { type: SelectionType.MissingRepository; repository: Repository }
 
+/** Represents a repository tab in the tab bar */
+export interface IRepositoryTab {
+  /** Unique identifier for the tab */
+  readonly id: string
+
+  /** The repository displayed in this tab */
+  readonly repository: Repository | CloningRepository
+}
+
 /** All of the shared app state. */
 export interface IAppState {
   readonly accounts: ReadonlyArray<Account>
@@ -90,6 +99,16 @@ export interface IAppState {
   readonly localRepositoryStateLookup: Map<number, ILocalRepositoryState>
 
   readonly selectedState: PossibleSelections | null
+
+  /**
+   * The array of open repository tabs
+   */
+  readonly openTabs: ReadonlyArray<IRepositoryTab>
+
+  /**
+   * The index of the currently active tab (-1 if no tabs are open)
+   */
+  readonly activeTabIndex: number
 
   /**
    * The state of the ongoing (if any) sign in process. See SignInState
