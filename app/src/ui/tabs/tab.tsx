@@ -37,13 +37,7 @@ export class Tab extends React.Component<ITabProps> {
   }
 
   private getRepositoryName(): string {
-    const { repository } = this.props
-
-    if (repository instanceof Repository) {
-      return repository.name
-    } else {
-      return repository.name
-    }
+    return this.props.repository.name
   }
 
   private getRepositoryIcon(): OcticonSymbol.OcticonSymbol {

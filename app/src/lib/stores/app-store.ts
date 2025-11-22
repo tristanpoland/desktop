@@ -465,6 +465,13 @@ const commitMessageGenerationButtonClickedKey =
 export const showChangesFilterKey = 'show-changes-filter'
 export const showChangesFilterDefault = true
 
+/**
+ * Generates a unique ID for a repository tab
+ */
+function generateTabId(): string {
+  return `tab-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+}
+
 export class AppStore extends TypedBaseStore<IAppState> {
   private readonly gitStoreCache: GitStoreCache
 
@@ -1896,9 +1903,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
     // If tabs are empty and we're selecting a repository, create the first tab
     if (repository !== null && this.openTabs.length === 0) {
-      const tabId = `tab-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
       this.openTabs = [{
-        id: tabId,
+        id: generateTabId(),
         repository,
       }]
       this.activeTabIndex = 0
@@ -2075,11 +2081,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
   public async _openRepositoryInNewTab(
     repository: Repository | CloningRepository
   ): Promise<void> {
-    // Generate a unique ID for the tab
-    const tabId = `tab-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-    
     const newTab: IRepositoryTab = {
-      id: tabId,
+      id: generateTabId(),
       repository,
     }
 
