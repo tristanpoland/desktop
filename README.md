@@ -29,12 +29,12 @@ See [Feature Summary](docs/FEATURE_SUMMARY.md) for a complete overview and getti
 
 <picture>
   <source
-    srcset="https://github.com/user-attachments/assets/8e62d3c3-c147-4d2b-a7f4-50fac0e5b141"
+    srcset="https://github.com/user-attachments/assets/a4088a02-b4fc-45a3-af06-c879b54642c0"
     media="(prefers-color-scheme: dark)"
   />
   <img
     width="1072"
-    src="https://github.com/user-attachments/assets/8e62d3c3-c147-4d2b-a7f4-50fac0e5b141"
+    src="https://github.com/user-attachments/assets/a4088a02-b4fc-45a3-af06-c879b54642c0"
     alt="A screenshot of the GitHub Desktop application showing changes being viewed and committed with two attributed co-authors"
   />
 </picture>
