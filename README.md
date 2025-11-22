@@ -6,12 +6,12 @@ uses [React](https://reactjs.org/).
 
 <picture>
   <source
-    srcset="https://user-images.githubusercontent.com/634063/202742848-63fa1488-6254-49b5-af7c-96a6b50ea8af.png"
+    srcset="https://github.com/user-attachments/assets/8e62d3c3-c147-4d2b-a7f4-50fac0e5b141"
     media="(prefers-color-scheme: dark)"
   />
   <img
     width="1072"
-    src="https://user-images.githubusercontent.com/634063/202742985-bb3b3b94-8aca-404a-8d8a-fd6a6f030672.png"
+    src="https://github.com/user-attachments/assets/8e62d3c3-c147-4d2b-a7f4-50fac0e5b141"
     alt="A screenshot of the GitHub Desktop application showing changes being viewed and committed with two attributed co-authors"
   />
 </picture>
