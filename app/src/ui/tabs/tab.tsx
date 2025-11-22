@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Repository } from '../../models/repository'
 import { CloningRepository } from '../../models/cloning-repository'
-import { Octicon } from '../octicons'
+import { Octicon, iconForRepository } from '../octicons'
 import * as OcticonSymbol from '../octicons/octicons.generated'
 
 interface ITabProps {
@@ -46,17 +46,17 @@ export class Tab extends React.Component<ITabProps> {
     }
   }
 
-  private getRepositoryIcon(): OcticonSymbol.OcticonSymbolType {
+  private getRepositoryIcon(): OcticonSymbol.OcticonSymbol {
     const { repository } = this.props
 
     if (repository instanceof Repository) {
       if (repository.gitHubRepository) {
-        return OcticonSymbol.iconForRepository(repository.gitHubRepository)
+        return iconForRepository(repository)
       }
-      return OcticonSymbol.OcticonSymbol.repo
+      return OcticonSymbol.repo
     } else {
       // Cloning repository
-      return OcticonSymbol.OcticonSymbol.desktopDownload
+      return OcticonSymbol.desktopDownload
     }
   }
 
@@ -74,7 +74,7 @@ export class Tab extends React.Component<ITabProps> {
             onClick={this.onCloseClick}
             aria-label="Close tab"
           >
-            <Octicon symbol={OcticonSymbol.OcticonSymbol.x} />
+            <Octicon symbol={OcticonSymbol.x} />
           </button>
         )}
       </div>
