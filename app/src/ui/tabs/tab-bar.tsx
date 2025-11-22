@@ -77,7 +77,7 @@ export class TabBar extends React.Component<ITabBarProps> {
           aria-label="Open new tab"
           title="Open new tab"
         >
-          <Octicon symbol={OcticonSymbol.OcticonSymbol.plus} />
+          <Octicon symbol={OcticonSymbol.plus} />
         </button>
       </div>
     )
