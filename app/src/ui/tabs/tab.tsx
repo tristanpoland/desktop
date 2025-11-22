@@ -56,7 +56,11 @@ export class Tab extends React.Component<ITabProps> {
     const className = `tab ${isActive ? 'active' : ''}`
 
     return (
-      <div className={className} onClick={this.onTabClick} title={this.getRepositoryName()}>
+      <div
+        className={className}
+        onClick={this.onTabClick}
+        title={this.getRepositoryName()}
+      >
         <Octicon symbol={this.getRepositoryIcon()} className="tab-icon" />
         <span className="tab-label">{this.getRepositoryName()}</span>
         {canClose && (
