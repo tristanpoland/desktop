@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Repository } from '../../models/repository'
 import { CloningRepository } from '../../models/cloning-repository'
-import { Octicon } from '../octicons'
+import { Octicon, iconForRepository } from '../octicons'
 import * as OcticonSymbol from '../octicons/octicons.generated'
 
 interface ITabProps {
@@ -44,7 +44,7 @@ export class Tab extends React.Component<ITabProps> {
     const { repository } = this.props
 
     if (repository instanceof Repository) {
-      return OcticonSymbol.iconForRepository(repository)
+      return iconForRepository(repository)
     } else {
       // Cloning repository
       return OcticonSymbol.OcticonSymbol.desktopDownload

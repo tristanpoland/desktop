@@ -2125,17 +2125,26 @@ export class AppStore extends TypedBaseStore<IAppState> {
       return
     }
 
+    // Remember if we're closing the active tab before adjusting indices
+    const closingActiveTab = index === this.activeTabIndex
+
     const newTabs = [...this.openTabs]
     newTabs.splice(index, 1)
     this.openTabs = newTabs
 
     // Adjust active tab index
-    if (this.activeTabIndex >= index && this.activeTabIndex > 0) {
+    if (this.activeTabIndex > index) {
+      // Active tab is after the closed tab, shift index down
       this.activeTabIndex--
+    } else if (closingActiveTab) {
+      // We closed the active tab, keep same index (or go to last if we were at the end)
+      if (this.activeTabIndex >= this.openTabs.length) {
+        this.activeTabIndex = this.openTabs.length - 1
+      }
     }
 
     // If we closed the active tab, select the new active tab
-    if (index === this.activeTabIndex) {
+    if (closingActiveTab) {
       const newActiveTab = this.openTabs[this.activeTabIndex]
       if (newActiveTab) {
         await this._selectRepository(newActiveTab.repository)
