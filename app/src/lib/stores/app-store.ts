@@ -118,6 +118,7 @@ import {
   RepositorySectionTab,
   SelectionType,
   IRepositoryState,
+  IRepositoryTab,
   ChangesSelectionKind,
   ChangesWorkingDirectorySelection,
   isRebaseConflictState,
@@ -464,6 +465,13 @@ const commitMessageGenerationButtonClickedKey =
 export const showChangesFilterKey = 'show-changes-filter'
 export const showChangesFilterDefault = true
 
+/**
+ * Generates a unique ID for a repository tab
+ */
+function generateTabId(): string {
+  return `tab-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+}
+
 export class AppStore extends TypedBaseStore<IAppState> {
   private readonly gitStoreCache: GitStoreCache
 
@@ -472,6 +480,12 @@ export class AppStore extends TypedBaseStore<IAppState> {
   private recentRepositories: ReadonlyArray<number> = new Array<number>()
 
   private selectedRepository: Repository | CloningRepository | null = null
+
+  /** The array of open repository tabs */
+  private openTabs: ReadonlyArray<IRepositoryTab> = []
+
+  /** The index of the currently active tab (-1 if no tabs open) */
+  private activeTabIndex: number = -1
 
   /** The background fetcher for the currently selected repository. */
   private currentBackgroundFetcher: BackgroundFetcher | null = null
@@ -1044,6 +1058,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
       windowZoomFactor: this.windowZoomFactor,
       appIsFocused: this.appIsFocused,
       selectedState: this.getSelectedState(),
+      openTabs: this.openTabs,
+      activeTabIndex: this.activeTabIndex,
       signInState: this.signInStore.getState(),
       currentPopup: this.popupManager.currentPopup,
       allPopups: this.popupManager.allPopups,
@@ -1885,6 +1901,36 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
     this.selectedRepository = repository
 
+    // If tabs are empty and we're selecting a repository, create the first tab
+    if (repository !== null && this.openTabs.length === 0) {
+      this.openTabs = [{
+        id: generateTabId(),
+        repository,
+      }]
+      this.activeTabIndex = 0
+    } else if (repository !== null) {
+      // Update the current tab's repository if it changed
+      const currentTab = this.openTabs[this.activeTabIndex]
+      if (currentTab && currentTab.repository !== repository) {
+        // Check if this repository is already in a tab
+        const existingTabIndex = this.openTabs.findIndex(
+          tab => tab.repository === repository
+        )
+        if (existingTabIndex >= 0) {
+          // Switch to existing tab
+          this.activeTabIndex = existingTabIndex
+        } else {
+          // Update current tab with new repository
+          const newTabs = [...this.openTabs]
+          newTabs[this.activeTabIndex] = {
+            ...currentTab,
+            repository,
+          }
+          this.openTabs = newTabs
+        }
+      }
+    }
+
     this.emitUpdate()
     this.stopBackgroundFetching()
     this.stopPullRequestUpdater()
@@ -2027,6 +2073,85 @@ export class AppStore extends TypedBaseStore<IAppState> {
     )
     this.currentBranchPruner = pruner
     this.currentBranchPruner.start()
+  }
+
+  /**
+   * Open a repository in a new tab
+   */
+  public async _openRepositoryInNewTab(
+    repository: Repository | CloningRepository
+  ): Promise<void> {
+    const newTab: IRepositoryTab = {
+      id: generateTabId(),
+      repository,
+    }
+
+    this.openTabs = [...this.openTabs, newTab]
+    this.activeTabIndex = this.openTabs.length - 1
+
+    // Select the repository to make it active
+    await this._selectRepository(repository)
+    this.emitUpdate()
+  }
+
+  /**
+   * Switch to a specific tab by index
+   */
+  public async _switchToTab(index: number): Promise<void> {
+    if (index < 0 || index >= this.openTabs.length) {
+      return
+    }
+
+    this.activeTabIndex = index
+    const tab = this.openTabs[index]
+    
+    if (tab) {
+      await this._selectRepository(tab.repository)
+    }
+    
+    this.emitUpdate()
+  }
+
+  /**
+   * Close a tab by index
+   */
+  public async _closeTab(index: number): Promise<void> {
+    if (index < 0 || index >= this.openTabs.length) {
+      return
+    }
+
+    // Don't close if it's the last tab
+    if (this.openTabs.length === 1) {
+      return
+    }
+
+    // Remember if we're closing the active tab before adjusting indices
+    const closingActiveTab = index === this.activeTabIndex
+
+    const newTabs = [...this.openTabs]
+    newTabs.splice(index, 1)
+    this.openTabs = newTabs
+
+    // Adjust active tab index
+    if (this.activeTabIndex > index) {
+      // Active tab is after the closed tab, shift index down
+      this.activeTabIndex--
+    } else if (closingActiveTab) {
+      // We closed the active tab, keep same index (or go to last if we were at the end)
+      if (this.activeTabIndex >= this.openTabs.length) {
+        this.activeTabIndex = this.openTabs.length - 1
+      }
+    }
+
+    // If we closed the active tab, select the new active tab
+    if (closingActiveTab) {
+      const newActiveTab = this.openTabs[this.activeTabIndex]
+      if (newActiveTab) {
+        await this._selectRepository(newActiveTab.repository)
+      }
+    }
+
+    this.emitUpdate()
   }
 
   public async _refreshIssues(repository: GitHubRepository) {

@@ -45,6 +45,7 @@ import { CloneRepositoryTab } from '../models/clone-repository-tab'
 import { CloningRepository } from '../models/cloning-repository'
 
 import { TitleBar, ZoomInfo, FullScreenInfo } from './window'
+import { TabBar } from './tabs'
 
 import { RepositoriesList } from './repositories-list'
 import { RepositoryView } from './repository'
@@ -2849,6 +2850,24 @@ export class App extends React.Component<IAppProps, IAppState> {
     })
   }
 
+  private renderTabBar() {
+    const { openTabs, activeTabIndex } = this.state
+    
+    if (openTabs.length === 0) {
+      return null
+    }
+
+    return (
+      <TabBar
+        tabs={openTabs}
+        activeTabIndex={activeTabIndex}
+        onTabSelected={this.onTabSelected}
+        onTabClosed={this.onTabClosed}
+        onNewTabClick={this.onNewTabClick}
+      />
+    )
+  }
+
   private renderApp() {
     return (
       <div
@@ -2856,6 +2875,7 @@ export class App extends React.Component<IAppProps, IAppState> {
         className={this.getDesktopAppContentsClassNames()}
       >
         {this.renderToolbar()}
+        {this.renderTabBar()}
         {this.renderBanner()}
         {this.renderRepository()}
         {this.renderPopups()}
@@ -3502,8 +3522,27 @@ export class App extends React.Component<IAppProps, IAppState> {
   }
 
   private onSelectionChanged = (repository: Repository | CloningRepository) => {
-    this.props.dispatcher.selectRepository(repository)
+    // If there are existing tabs and the repository foldout is open,
+    // we're opening a new tab instead of switching
+    if (this.state.openTabs.length > 0 && this.state.currentFoldout?.type === FoldoutType.Repository) {
+      this.props.dispatcher.openRepositoryInNewTab(repository)
+    } else {
+      this.props.dispatcher.selectRepository(repository)
+    }
     this.props.dispatcher.closeFoldout(FoldoutType.Repository)
+  }
+
+  private onTabSelected = (index: number) => {
+    this.props.dispatcher.switchToTab(index)
+  }
+
+  private onTabClosed = (index: number) => {
+    this.props.dispatcher.closeTab(index)
+  }
+
+  private onNewTabClick = () => {
+    // Open the repository foldout to select a repository for the new tab
+    this.props.dispatcher.showFoldout({ type: FoldoutType.Repository })
   }
 
   private onViewCommitOnGitHub = async (SHA: string, filePath?: string) => {
